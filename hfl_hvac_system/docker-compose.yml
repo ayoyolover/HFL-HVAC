@@ -1,0 +1,158 @@
+version: '3.8'
+
+services:
+  # Redis缓存服务
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - hvac_network
+
+  # 云中心服务
+  cloud_server:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.cloud
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SERVER_TYPE=cloud
+    ports:
+      - "50052:50052"
+      - "8080:8080"  # 监控面板
+    depends_on:
+      - redis
+    volumes:
+      - ./configs:/app/configs
+      - ./models:/app/models
+      - ./logs:/app/logs
+    networks:
+      - hvac_network
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+
+  # 边缘服务器1
+  edge_server_1:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.edge
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SERVER_TYPE=edge
+      - SERVER_ID=edge_001
+      - CLOUD_HOST=cloud_server
+      - CLOUD_PORT=50052
+    ports:
+      - "50061:50051"
+    depends_on:
+      - redis
+      - cloud_server
+    volumes:
+      - ./configs:/app/configs
+      - ./logs:/app/logs
+    networks:
+      - hvac_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+
+  # 边缘服务器2
+  edge_server_2:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.edge
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SERVER_TYPE=edge
+      - SERVER_ID=edge_002
+      - CLOUD_HOST=cloud_server
+      - CLOUD_PORT=50052
+    ports:
+      - "50062:50051"
+    depends_on:
+      - redis
+      - cloud_server
+    volumes:
+      - ./configs:/app/configs
+      - ./logs:/app/logs
+    networks:
+      - hvac_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+
+  # 设备仿真器（模拟多个设备）
+  device_simulator:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.device
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SERVER_TYPE=device
+      - NUM_DEVICES=10
+      - EDGE_HOST_1=edge_server_1
+      - EDGE_HOST_2=edge_server_2
+      - EDGE_PORT=50051
+    depends_on:
+      - edge_server_1
+      - edge_server_2
+    volumes:
+      - ./configs:/app/configs
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - hvac_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+
+  # Prometheus监控
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./deployment/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - hvac_network
+
+  # Grafana可视化
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./deployment/grafana-dashboards:/etc/grafana/provisioning/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - prometheus
+    networks:
+      - hvac_network
+
+networks:
+  hvac_network:
+    driver: bridge
+
+volumes:
+  redis_data:
+  prometheus_data:
+  grafana_data:

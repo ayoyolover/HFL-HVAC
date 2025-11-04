@@ -1,0 +1,171 @@
+syntax = "proto3";
+
+package hfl_hvac;
+
+// 设备注册消息
+message DeviceRegistration {
+    string device_id = 1;
+    string device_type = 2;
+    string zone_id = 3;
+    int32 model_version = 4;
+    map<string, string> capabilities = 5;
+    int64 timestamp = 6;
+}
+
+// 模型更新消息
+message ModelUpdate {
+    string device_id = 1;
+    int64 timestamp = 2;
+    bytes compressed_gradients = 3;  // 压缩的梯度数据
+    float privacy_budget_used = 4;
+    int32 num_samples = 5;
+    map<string, float> metrics = 6;  // loss, accuracy等
+    string model_version = 7;
+}
+
+// 聚合模型消息
+message AggregatedModel {
+    string aggregation_id = 1;
+    int64 timestamp = 2;
+    bytes model_weights = 3;
+    int32 num_devices = 4;
+    int32 total_samples = 5;
+    map<string, float> global_metrics = 6;
+    string aggregation_method = 7;  // fedavg, fedprox, etc
+}
+
+// 控制指令消息
+message ControlCommand {
+    string command_id = 1;
+    string target_device = 2;
+    int64 timestamp = 3;
+    
+    // 控制参数
+    float temperature_setpoint = 4;
+    float humidity_setpoint = 5;
+    float ventilation_rate = 6;
+    
+    // 优先级和约束
+    int32 priority = 7;
+    float min_temperature = 8;
+    float max_temperature = 9;
+    
+    // DRL动作
+    repeated float drl_actions = 10;
+}
+
+// 设备状态消息
+message DeviceStatus {
+    string device_id = 1;
+    int64 timestamp = 2;
+    
+    // 传感器数据
+    float temperature = 3;
+    float humidity = 4;
+    float co2_level = 5;
+    int32 occupancy = 6;
+    float power_consumption = 7;
+    
+    // 设备健康状态
+    bool is_online = 8;
+    float cpu_usage = 9;
+    float memory_usage = 10;
+    int64 last_update = 11;
+}
+
+// 边缘服务器消息
+message EdgeServerInfo {
+    string server_id = 1;
+    string region = 2;
+    repeated string connected_devices = 3;
+    int32 compute_capacity = 4;
+    float current_load = 5;
+}
+
+// 聚类信息
+message ClusterInfo {
+    string cluster_id = 1;
+    repeated string device_ids = 2;
+    map<string, float> cluster_center = 3;  // 聚类中心特征
+    float intra_cluster_variance = 4;
+}
+
+// 训练请求
+message TrainingRequest {
+    string request_id = 1;
+    string model_config = 2;  // JSON配置
+    int32 local_epochs = 3;
+    float learning_rate = 4;
+    bool enable_privacy = 5;
+}
+
+// 训练响应
+message TrainingResponse {
+    string request_id = 1;
+    bool success = 2;
+    string error_message = 3;
+    ModelUpdate model_update = 4;
+}
+
+// 同步请求
+message SyncRequest {
+    string device_id = 1;
+    string current_model_version = 2;
+    int64 last_sync_timestamp = 3;
+}
+
+// 同步响应  
+message SyncResponse {
+    bool has_update = 1;
+    AggregatedModel latest_model = 2;
+    repeated ControlCommand pending_commands = 3;
+}
+
+// 性能指标
+message PerformanceMetrics {
+    string device_id = 1;
+    int64 timestamp = 2;
+    
+    // 能耗指标
+    float total_energy_consumed = 3;  // kWh
+    float average_power = 4;  // kW
+    float peak_power = 5;  // kW
+    
+    // 舒适度指标
+    float comfort_violations = 6;
+    float average_pmv = 7;  // Predicted Mean Vote
+    float temperature_stability = 8;
+    
+    // 模型性能
+    float prediction_accuracy = 9;
+    float control_effectiveness = 10;
+}
+
+// 异常报告
+message AnomalyReport {
+    string device_id = 1;
+    int64 timestamp = 2;
+    string anomaly_type = 3;
+    float severity = 4;
+    string description = 5;
+    map<string, string> context = 6;
+}
+
+// RPC服务定义
+service HFLHVACService {
+    // 设备管理
+    rpc RegisterDevice(DeviceRegistration) returns (DeviceRegistration);
+    rpc ReportStatus(DeviceStatus) returns (ControlCommand);
+    
+    // 模型训练和更新
+    rpc SubmitModelUpdate(ModelUpdate) returns (TrainingResponse);
+    rpc GetGlobalModel(SyncRequest) returns (SyncResponse);
+    
+    // 边缘聚合
+    rpc SubmitToEdge(ModelUpdate) returns (AggregatedModel);
+    rpc GetClusterInfo(EdgeServerInfo) returns (ClusterInfo);
+    
+    // 监控和分析
+    rpc ReportMetrics(PerformanceMetrics) returns (ControlCommand);
+    rpc ReportAnomaly(AnomalyReport) returns (ControlCommand);
+}

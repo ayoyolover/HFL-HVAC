@@ -1,0 +1,143 @@
+# HFL-HVAC系统配置文件
+
+system:
+  name: "HFL-HVAC Control System"
+  version: "1.0.0"
+  mode: "simulation"  # simulation / production
+
+# 设备层配置
+device_tier:
+  num_devices: 10
+  data_collection:
+    interval: 300  # 秒（5分钟）
+    buffer_size: 1000
+  local_training:
+    batch_size: 32
+    learning_rate: 0.001
+    epochs_per_round: 5
+    optimizer: "adam"
+  privacy:
+    enable: true
+    epsilon: 1.0
+    delta: 1e-5
+    clip_norm: 1.0
+    noise_multiplier: 1.0
+  model:
+    architecture: "hvac_mlp"
+    input_dim: 50
+    hidden_dims: [128, 64, 32]
+    output_dim: 4
+
+# 边缘层配置
+edge_tier:
+  num_servers: 3
+  aggregation:
+    method: "fedavg"  # fedavg / fedprox / scaffold / fednova
+    min_devices: 3
+    timeout: 600  # 秒
+  clustering:
+    enable: true
+    num_clusters: 5
+    similarity_metric: "cosine"
+  caching:
+    enable: true
+    max_cache_size: 1000  # MB
+    ttl: 3600  # 秒
+
+# 云层配置
+cloud_tier:
+  global_aggregation:
+    method: "hierarchical"
+    consensus_rounds: 3
+  drl_agent:
+    algorithm: "sac"  # sac / ppo / a3c
+    state_dim: 56
+    action_dim: 20
+    hidden_dims: [256, 256]
+    learning_rate: 3e-4
+    gamma: 0.99
+    tau: 0.005
+    alpha: 0.2
+    auto_entropy_tuning: true
+    replay_buffer_size: 1000000
+    batch_size: 256
+  optimization:
+    objectives:
+      comfort_weight: 0.4
+      energy_weight: 0.4
+      peak_weight: 0.2
+    constraints:
+      max_power: 100  # kW
+      comfort_temp_range: [20, 26]  # °C
+      comfort_humidity_range: [30, 60]  # %
+      max_co2: 1000  # ppm
+
+# 通信配置
+communication:
+  protocol: "grpc"
+  compression: true
+  encryption: false
+  device_to_edge:
+    port: 50051
+    max_message_size: 10485760  # 10MB
+  edge_to_cloud:
+    port: 50052
+    max_message_size: 104857600  # 100MB
+  heartbeat_interval: 30  # 秒
+  timeout: 300  # 秒
+
+# 仿真配置
+simulation:
+  building:
+    num_zones: 10
+    zone_types: ["office", "meeting", "corridor", "server", "lobby"]
+    occupancy_pattern: "weekday"
+  weather:
+    climate: "temperate"
+    base_temperature: 20  # °C
+    variation: 2  # °C
+  duration:
+    hours: 168  # 一周
+    step_size: 300  # 秒（5分钟）
+
+# 监控配置
+monitoring:
+  enable: true
+  metrics:
+    - "total_energy"
+    - "average_temperature"
+    - "comfort_violations"
+    - "model_accuracy"
+    - "privacy_budget"
+  logging:
+    level: "INFO"
+    file: "logs/system.log"
+    rotation: "daily"
+    retention: 30  # 天
+  dashboard:
+    enable: true
+    port: 8080
+    update_interval: 60  # 秒
+
+# 部署配置
+deployment:
+  mode: "docker"  # docker / kubernetes
+  docker:
+    registry: "localhost:5000"
+    image_prefix: "hfl-hvac"
+  kubernetes:
+    namespace: "hvac-system"
+    replicas:
+      device: 10
+      edge: 3
+      cloud: 1
+  resources:
+    device:
+      cpu: "0.5"
+      memory: "512Mi"
+    edge:
+      cpu: "2"
+      memory: "4Gi"
+    cloud:
+      cpu: "8"
+      memory: "16Gi"

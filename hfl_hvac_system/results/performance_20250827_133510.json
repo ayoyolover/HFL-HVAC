@@ -1,0 +1,266 @@
+[
+  {
+    "timestamp": "2025-08-27T13:35:01.485986",
+    "metrics": {
+      "timestamp": "2025-08-27T13:40:00.036025",
+      "total_power_kw": 11.75,
+      "average_temperature": 21.44,
+      "total_occupancy": 18,
+      "num_devices": 5,
+      "comfort_violations": 0
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:01.721976",
+    "metrics": {
+      "timestamp": "2025-08-27T14:40:00.036025",
+      "total_power_kw": 12.89,
+      "average_temperature": 20.95,
+      "total_occupancy": 43,
+      "num_devices": 5,
+      "comfort_violations": 1
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:02.031212",
+    "metrics": {
+      "timestamp": "2025-08-27T15:40:00.036025",
+      "total_power_kw": 16.48,
+      "average_temperature": 20.67,
+      "total_occupancy": 50,
+      "num_devices": 5,
+      "comfort_violations": 1
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:02.400585",
+    "metrics": {
+      "timestamp": "2025-08-27T16:40:00.036025",
+      "total_power_kw": 17.28,
+      "average_temperature": 20.63,
+      "total_occupancy": 44,
+      "num_devices": 5,
+      "comfort_violations": 1
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:02.765328",
+    "metrics": {
+      "timestamp": "2025-08-27T17:40:00.036025",
+      "total_power_kw": 18.24,
+      "average_temperature": 20.41,
+      "total_occupancy": 47,
+      "num_devices": 5,
+      "comfort_violations": 3
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:03.096187",
+    "metrics": {
+      "timestamp": "2025-08-27T18:40:00.036025",
+      "total_power_kw": 17.78,
+      "average_temperature": 20.48,
+      "total_occupancy": 18,
+      "num_devices": 5,
+      "comfort_violations": 1
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:03.556150",
+    "metrics": {
+      "timestamp": "2025-08-27T19:40:00.036025",
+      "total_power_kw": 17.53,
+      "average_temperature": 20.61,
+      "total_occupancy": 18,
+      "num_devices": 5,
+      "comfort_violations": 1
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:03.881082",
+    "metrics": {
+      "timestamp": "2025-08-27T20:40:00.036025",
+      "total_power_kw": 15.62,
+      "average_temperature": 20.73,
+      "total_occupancy": 6,
+      "num_devices": 5,
+      "comfort_violations": 0
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:04.235876",
+    "metrics": {
+      "timestamp": "2025-08-27T21:40:00.036025",
+      "total_power_kw": 17.09,
+      "average_temperature": 20.5,
+      "total_occupancy": 6,
+      "num_devices": 5,
+      "comfort_violations": 0
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:04.596289",
+    "metrics": {
+      "timestamp": "2025-08-27T22:40:00.036025",
+      "total_power_kw": 18.27,
+      "average_temperature": 20.43,
+      "total_occupancy": 2,
+      "num_devices": 5,
+      "comfort_violations": 1
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:04.976288",
+    "metrics": {
+      "timestamp": "2025-08-27T23:40:00.036025",
+      "total_power_kw": 18.44,
+      "average_temperature": 20.46,
+      "total_occupancy": 1,
+      "num_devices": 5,
+      "comfort_violations": 3
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:05.355115",
+    "metrics": {
+      "timestamp": "2025-08-28T00:40:00.036025",
+      "total_power_kw": 44.46,
+      "average_temperature": 20.44,
+      "total_occupancy": 3,
+      "num_devices": 5,
+      "comfort_violations": 3
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:05.719193",
+    "metrics": {
+      "timestamp": "2025-08-28T01:40:00.036025",
+      "total_power_kw": 43.93,
+      "average_temperature": 20.09,
+      "total_occupancy": 1,
+      "num_devices": 5,
+      "comfort_violations": 4
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:06.115875",
+    "metrics": {
+      "timestamp": "2025-08-28T02:40:00.036025",
+      "total_power_kw": 43.68,
+      "average_temperature": 20.16,
+      "total_occupancy": 2,
+      "num_devices": 5,
+      "comfort_violations": 4
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:06.500959",
+    "metrics": {
+      "timestamp": "2025-08-28T03:40:00.036025",
+      "total_power_kw": 43.73,
+      "average_temperature": 20.31,
+      "total_occupancy": 2,
+      "num_devices": 5,
+      "comfort_violations": 4
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:06.895465",
+    "metrics": {
+      "timestamp": "2025-08-28T04:40:00.036025",
+      "total_power_kw": 43.76,
+      "average_temperature": 20.32,
+      "total_occupancy": 2,
+      "num_devices": 5,
+      "comfort_violations": 4
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:07.302760",
+    "metrics": {
+      "timestamp": "2025-08-28T05:40:00.036025",
+      "total_power_kw": 44.8,
+      "average_temperature": 20.46,
+      "total_occupancy": 2,
+      "num_devices": 5,
+      "comfort_violations": 2
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:07.859735",
+    "metrics": {
+      "timestamp": "2025-08-28T06:40:00.036025",
+      "total_power_kw": 45.71,
+      "average_temperature": 20.57,
+      "total_occupancy": 5,
+      "num_devices": 5,
+      "comfort_violations": 3
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:08.263829",
+    "metrics": {
+      "timestamp": "2025-08-28T07:40:00.036025",
+      "total_power_kw": 46.51,
+      "average_temperature": 20.4,
+      "total_occupancy": 4,
+      "num_devices": 5,
+      "comfort_violations": 3
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:08.679663",
+    "metrics": {
+      "timestamp": "2025-08-28T08:40:00.036025",
+      "total_power_kw": 47.63,
+      "average_temperature": 20.01,
+      "total_occupancy": 48,
+      "num_devices": 5,
+      "comfort_violations": 4
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:09.104148",
+    "metrics": {
+      "timestamp": "2025-08-28T09:40:00.036025",
+      "total_power_kw": 46.33,
+      "average_temperature": 19.71,
+      "total_occupancy": 44,
+      "num_devices": 5,
+      "comfort_violations": 4
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:09.550249",
+    "metrics": {
+      "timestamp": "2025-08-28T10:40:00.036025",
+      "total_power_kw": 50.31,
+      "average_temperature": 19.38,
+      "total_occupancy": 46,
+      "num_devices": 5,
+      "comfort_violations": 4
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:09.994930",
+    "metrics": {
+      "timestamp": "2025-08-28T11:40:00.036025",
+      "total_power_kw": 50.66,
+      "average_temperature": 19.13,
+      "total_occupancy": 49,
+      "num_devices": 5,
+      "comfort_violations": 4
+    }
+  },
+  {
+    "timestamp": "2025-08-27T13:35:10.476279",
+    "metrics": {
+      "timestamp": "2025-08-28T12:40:00.036025",
+      "total_power_kw": 49.28,
+      "average_temperature": 18.6,
+      "total_occupancy": 19,
+      "num_devices": 5,
+      "comfort_violations": 5
+    }
+  }
+]
