@@ -1,565 +1,483 @@
-Hierarchical Federated Learning HVAC Control System (HFL-HVAC)
+# Hierarchical Federated Learning HVAC Control System (HFL-HVAC)
 
-System Overview
+## System Overview
 
 This project implements an intelligent HVAC control system based on Hierarchical Federated Learning (HFL) and Deep Reinforcement Learning (DRL). The system adopts a three-tier architecture (Device-Edge-Cloud) to achieve privacy-preserving distributed learning and intelligent energy-saving control.
 
-Core Features
-Three-Tier Architecture Design
+## Core Features
 
-Device Tier: Local data collection, preprocessing, and model training
+### 1. Three-Tier Architecture Design
 
-Edge Computing Tier: Device clustering, local model aggregation, and personalized learning
+- **Device Tier**: Local data collection, preprocessing, and model training
+- **Edge Computing Tier**: Device clustering, local model aggregation, and personalized learning
+- **Cloud Center Tier**: Global aggregation, DRL decision-making, and system optimization
 
-Cloud Center Tier: Global aggregation, DRL decision-making, and system optimization
-Federated Learning Capabilities
+### 2. Federated Learning Capabilities
 
-Supports multiple aggregation algorithms (FedAvg, FedProx, SCAFFOLD, FedNova)
+- Supports multiple aggregation algorithms (FedAvg, FedProx, SCAFFOLD, FedNova)
+- Personalized Federated Learning (FedPer, Ditto)
+- Cluster-based hierarchical aggregation
 
-Personalized Federated Learning (FedPer, Ditto)
+### 3. Privacy Protection Mechanisms
 
-Cluster-based hierarchical aggregation
-Privacy Protection Mechanisms
+- Local Differential Privacy (LDP)
+- Gradient clipping and noise addition
+- Secure aggregation protocols
+- Data anonymization
 
-Local Differential Privacy (LDP)
+### 4. DRL Intelligent Control
 
-Gradient clipping and noise addition
+- Soft Actor-Critic (SAC) algorithm
+- Multi-objective optimization (comfort, energy consumption, peak shaving)
+- Adaptive control strategies
 
-Secure aggregation protocols
+### 5. Simulation Environment
 
-Data anonymization
-DRL Intelligent Control
+- Complete building thermodynamic model
+- Multi-zone HVAC system simulation
+- Weather and occupancy simulation
+- Time-of-use electricity pricing consideration
 
-Soft Actor-Critic (SAC) algorithm
+## Quick Start
 
-Multi-objective optimization (comfort, energy consumption, peak shaving)
+### Environment Requirements
 
-Adaptive control strategies
-Simulation Environment
+- Python 3.8+
+- PyTorch 1.10+
+- Docker & Docker Compose (optional)
 
-Complete building thermodynamic model
+### Installation Steps
 
-Multi-zone HVAC system simulation
+1. Clone the repository:
 
-Weather and occupancy simulation
-
-Time-of-use electricity pricing consideration
-
-Quick Start
-
-Environment Requirements
-Python 3.8+
-
-PyTorch 1.10+
-
-Docker & Docker Compose (optional)
-
-Installation Steps
-Clone the repository:
-
+```
 git clone <repository-url>
 cd hfl_hvac_system
+```
 
-Install dependencies:
+1. Install dependencies:
 
+```
 pip install -r requirements.txt
+```
 
-Compile protobuf (if real communication is needed):
+1. Compile protobuf (if real communication is needed):
 
+```
 python -m grpc_tools.protoc -I./common --python_out=./common --grpc_python_out=./common ./common/protocol.proto
+```
 
-Running Simulation
+### Running Simulation
 
-Method 1: Direct Execution
+#### Method 1: Direct Execution
 
+```
 python main_system.py
+```
 
-Method 2: Using Docker
+#### Method 2: Using Docker
 
+```
 docker-compose up -d
+```
 
-System Architecture
+## System Architecture
 
+```
 hfl_hvac_system/
 ├── device_tier/          # Device Tier
-├── data_collector/   # Data Collection
-
-│   ├── sensor_interface.py
-
-│   ├── data_preprocessor.py
-
-│   └── privacy_guard.py
-
-├── local_trainer/    # Local Training
-
-│   ├── model_manager.py
-
-│   └── trainer.py
-
-└── control/          # Device Control
-
+│   ├── data_collector/   # Data Collection
+│   │   ├── sensor_interface.py
+│   │   ├── data_preprocessor.py
+│   │   └── privacy_guard.py
+│   ├── local_trainer/    # Local Training
+│   │   ├── model_manager.py
+│   │   └── trainer.py
+│   └── control/          # Device Control
 ├── edge_tier/            # Edge Computing Tier
-├── aggregation/      # Model Aggregation
-
-│   └── federated_aggregator.py
-
-└── device_management/ # Device Management
-
+│   ├── aggregation/      # Model Aggregation
+│   │   └── federated_aggregator.py
+│   └── device_management/ # Device Management
 ├── cloud_tier/           # Cloud Center Tier
-├── drl_agent/        # DRL Agent
-
-│   ├── environment.py
-
-│   └── sac_agent.py
-
-└── global_aggregation/ # Global Aggregation
-
+│   ├── drl_agent/        # DRL Agent
+│   │   ├── environment.py
+│   │   └── sac_agent.py
+│   └── global_aggregation/ # Global Aggregation
 ├── simulator/            # Simulator
-└── device_simulator.py
-
+│   └── device_simulator.py
 ├── common/               # Common Modules
-└── protocol.proto    # Communication Protocol
-
+│   └── protocol.proto    # Communication Protocol
 └── main_system.py        # Main Program
-
-🏗️ In-depth System Architecture Analysis
-
-1️⃣ Core Simulation Layer (simulator/)
-
-device_simulator.py
-
-Core Components:
-BuildingZone: Building zone physical model
-
-HVACDeviceSimulator: HVAC device simulator
-
-WeatherSimulator: Weather condition generator
-
-BuildingSimulator: Building overall coordinator
-
-Functionality:
-Simulates real building thermodynamic dynamics
-
-Generates sensor data (temperature, humidity, CO2, occupancy)
-
-Calculates energy consumption and thermal load
-
-Simulates weather changes and occupancy patterns
-
-2️⃣ Device Tier (device_tier/)
-
-data_collector/sensor_interface.py
-
-Data Collection Interface
-SensorInterface: Sensor abstract base class
-
-SimulatedSensor: Simulated sensor implementation
-
-DataCollector: Multi-sensor management and data buffering
-
-DataQualityChecker: Data quality validation
-
-Functionality:
-Unified sensor interface (supports real and simulated sensors)
-
-Asynchronous data collection
-
-Data quality checking and cleaning
-
-Buffer management
-
-data_collector/data_preprocessor.py
-
-Feature Engineering
-DataPreprocessor: Main preprocessor
-
-Raw feature extraction (5 dimensions)
-
-Temporal features (6 dimensions: hour/week cyclic encoding)
-
-Statistical features (20 dimensions: rolling window statistics)
-
-Lag features (8 dimensions: historical values)
-
-Interaction features (3 dimensions: variable relationships)
-
-FeatureEngineering: Advanced features
-
-Functionality:
-Transforms raw data into 42-dimensional feature vectors
-
-Temporal feature extraction
-
-Normalization and standardization
-
-Comfort index calculation
-
-data_collector/privacy_guard.py
-
-Privacy Protection Mechanisms
-DifferentialPrivacy: Differential privacy implementation
-
-Gradient clipping (clip_norm=1.0)
-
-Gaussian noise addition (ε=1.0)
-
-DataAnonymizer: Data anonymization
-
-SecureAggregation: Secure aggregation protocol
-
-PrivacyAccountant: Privacy budget management
-
-Functionality:
-Local Differential Privacy (LDP) protection
-
-Device ID anonymization
-
-Privacy budget tracking
-
-K-anonymization of occupancy data
-
-local_trainer/model_manager.py
-
-Model Management
-HVACModel: Neural network architecture
-
-Input layer: 42 dimensions
-
-Hidden layers: [128, 64, 32]
-
-Output layer: 4 dimensions (control parameters)
-
-Personalization layer: Federated learning specific
-
-ModelManager: Version control
-
-Functionality:
-Model creation and initialization
-
-Version management and storage
-
-Model merging and exporting
-
-Parameter separation (shared vs personalized)
-
-local_trainer/trainer.py
-
-Local Training
-LocalTrainer: Basic trainer
-
-AdaptiveTrainer: Adaptive learning rate
-
-FederatedLocalTrainer: Federated training specific
-
-FedProx regularization
-
-Model update calculation
-
-Functionality:
-Local SGD training
-
-Early stopping mechanism
-
-Privacy noise injection
-
-Gradient calculation and updates
-
-3️⃣ Edge Computing Tier (edge_tier/)
-
-aggregation/federated_aggregator.py
-
-Federated Aggregation Algorithms
-FederatedAggregator: Basic aggregator
-
-federated_averaging: FedAvg algorithm
-
-fedprox_aggregation: FedProx (proximal optimization)
-
-scaffold_aggregation: SCAFFOLD (drift correction)
-
-fednova_aggregation: FedNova (normalized averaging)
-
-PersonalizedFederatedAggregator: Personalized FL
-
-ClusteredFederatedAggregator: Clustered aggregation
-
-Functionality:
-Multiple aggregation strategy implementations
-
-Handles non-IID data
-
-Device clustering (similarity calculation)
-
-Hierarchical aggregation (intra-cluster → cross-cluster → global)
-
-4️⃣ Cloud Center Tier (cloud_tier/)
-
-drl_agent/environment.py
-
-Reinforcement Learning Environment
-HVACEnvironment: Basic environment
-
-State space: 56 dimensions (10 zones × 5 features + 6 global)
-
-Action space: 20 dimensions (10 zones × 2 controls)
-
-Reward function: Multi-objective optimization
-
-MultiObjectiveHVACEnvironment: Extended environment
-
-Functionality:
-Gym environment interface
-
-State transition simulation
-
-Multi-objective reward calculation (comfort 40%, energy 40%, peak 20%)
-
-Time-of-use electricity pricing consideration
-
-drl_agent/sac_agent.py
-
-SAC Algorithm Implementation
-GaussianPolicy: Policy network (stochastic policy)
-
-QNetwork: Q-value network (double Q-network)
-
-SACAgent: Main agent
-
-Automatic temperature adjustment
-
-Soft update mechanism (τ=0.005)
-
-Experience replay buffer
-
-HVACController: Control interface
-
-Functionality:
-Continuous action space control
-
-Maximum entropy reinforcement learning
-
-Off-policy learning
-
-Control command generation
-
-5️⃣ System Integration (main_system.py)
-
-System Coordinator
-DeviceTier: Device tier encapsulation
-
-EdgeTier: Edge tier encapsulation
-
-CloudTier: Cloud tier encapsulation
-
-HFLHVACSystem: Main system class
-
-Core Workflow:
-Data Flow:
-
-   
+```
+
+## 🏗️ In-depth System Architecture Analysis
+
+### 1️⃣ **Core Simulation Layer** (`simulator/`)
+
+#### `device_simulator.py`
+
+```
+# Core Components:
+- BuildingZone: Building zone physical model
+- HVACDeviceSimulator: HVAC device simulator
+- WeatherSimulator: Weather condition generator
+- BuildingSimulator: Building overall coordinator
+```
+
+**Functionality**:
+
+- Simulates real building thermodynamic dynamics
+- Generates sensor data (temperature, humidity, CO2, occupancy)
+- Calculates energy consumption and thermal load
+- Simulates weather changes and occupancy patterns
+
+### 2️⃣ **Device Tier** (`device_tier/`)
+
+#### `data_collector/sensor_interface.py`
+
+```
+# Data Collection Interface
+- SensorInterface: Sensor abstract base class
+- SimulatedSensor: Simulated sensor implementation
+- DataCollector: Multi-sensor management and data buffering
+- DataQualityChecker: Data quality validation
+```
+
+**Functionality**:
+
+- Unified sensor interface (supports real and simulated sensors)
+- Asynchronous data collection
+- Data quality checking and cleaning
+- Buffer management
+
+#### `data_collector/data_preprocessor.py`
+
+```
+# Feature Engineering
+- DataPreprocessor: Main preprocessor
+  - Raw feature extraction (5 dimensions)
+  - Temporal features (6 dimensions: hour/week cyclic encoding)
+  - Statistical features (20 dimensions: rolling window statistics)
+  - Lag features (8 dimensions: historical values)
+  - Interaction features (3 dimensions: variable relationships)
+- FeatureEngineering: Advanced features
+```
+
+**Functionality**:
+
+- Transforms raw data into 42-dimensional feature vectors
+- Temporal feature extraction
+- Normalization and standardization
+- Comfort index calculation
+
+#### `data_collector/privacy_guard.py`
+
+```
+# Privacy Protection Mechanisms
+- DifferentialPrivacy: Differential privacy implementation
+  - Gradient clipping (clip_norm=1.0)
+  - Gaussian noise addition (ε=1.0)
+- DataAnonymizer: Data anonymization
+- SecureAggregation: Secure aggregation protocol
+- PrivacyAccountant: Privacy budget management
+```
+
+**Functionality**:
+
+- Local Differential Privacy (LDP) protection
+- Device ID anonymization
+- Privacy budget tracking
+- K-anonymization of occupancy data
+
+#### `local_trainer/model_manager.py`
+
+```
+# Model Management
+- HVACModel: Neural network architecture
+  - Input layer: 42 dimensions
+  - Hidden layers: [128, 64, 32]
+  - Output layer: 4 dimensions (control parameters)
+  - Personalization layer: Federated learning specific
+- ModelManager: Version control
+```
+
+**Functionality**:
+
+- Model creation and initialization
+- Version management and storage
+- Model merging and exporting
+- Parameter separation (shared vs personalized)
+
+#### `local_trainer/trainer.py`
+
+```
+# Local Training
+- LocalTrainer: Basic trainer
+- AdaptiveTrainer: Adaptive learning rate
+- FederatedLocalTrainer: Federated training specific
+  - FedProx regularization
+  - Model update calculation
+```
+
+**Functionality**:
+
+- Local SGD training
+- Early stopping mechanism
+- Privacy noise injection
+- Gradient calculation and updates
+
+### 3️⃣ **Edge Computing Tier** (`edge_tier/`)
+
+#### `aggregation/federated_aggregator.py`
+
+```
+# Federated Aggregation Algorithms
+- FederatedAggregator: Basic aggregator
+  - federated_averaging: FedAvg algorithm
+  - fedprox_aggregation: FedProx (proximal optimization)
+  - scaffold_aggregation: SCAFFOLD (drift correction)
+  - fednova_aggregation: FedNova (normalized averaging)
+- PersonalizedFederatedAggregator: Personalized FL
+- ClusteredFederatedAggregator: Clustered aggregation
+```
+
+**Functionality**:
+
+- Multiple aggregation strategy implementations
+- Handles non-IID data
+- Device clustering (similarity calculation)
+- Hierarchical aggregation (intra-cluster → cross-cluster → global)
+
+### 4️⃣ **Cloud Center Tier** (`cloud_tier/`)
+
+#### `drl_agent/environment.py`
+
+```
+# Reinforcement Learning Environment
+- HVACEnvironment: Basic environment
+  - State space: 56 dimensions (10 zones × 5 features + 6 global)
+  - Action space: 20 dimensions (10 zones × 2 controls)
+  - Reward function: Multi-objective optimization
+- MultiObjectiveHVACEnvironment: Extended environment
+```
+
+**Functionality**:
+
+- Gym environment interface
+- State transition simulation
+- Multi-objective reward calculation (comfort 40%, energy 40%, peak 20%)
+- Time-of-use electricity pricing consideration
+
+#### `drl_agent/sac_agent.py`
+
+```
+# SAC Algorithm Implementation
+- GaussianPolicy: Policy network (stochastic policy)
+- QNetwork: Q-value network (double Q-network)
+- SACAgent: Main agent
+  - Automatic temperature adjustment
+  - Soft update mechanism (τ=0.005)
+  - Experience replay buffer
+- HVACController: Control interface
+```
+
+**Functionality**:
+
+- Continuous action space control
+- Maximum entropy reinforcement learning
+- Off-policy learning
+- Control command generation
+
+### 5️⃣ **System Integration** (`main_system.py`)
+
+```
+# System Coordinator
+- DeviceTier: Device tier encapsulation
+- EdgeTier: Edge tier encapsulation
+- CloudTier: Cloud tier encapsulation
+- HFLHVACSystem: Main system class
+```
+
+**Core Workflow**:
+
+1. **Data Flow**:
+
+   ```
    Simulator → Sensor → Preprocessing → Feature Engineering → Local Training
-   
-Federated Learning Flow:
+   ```
 
-   
+2. **Federated Learning Flow**:
+
+   ```
    Device Training → Edge Aggregation → Cloud Aggregation → Model Distribution
-   
-Control Flow:
+   ```
 
-   
+3. **Control Flow**:
+
+   ```
    Building State → DRL Decision → Control Command → Device Execution
-   
+   ```
 
-6️⃣ Communication Protocol (common/protocol.proto)
+### 6️⃣ **Communication Protocol** (`common/protocol.proto`)
 
 Defines all gRPC message types:
-DeviceRegistration: Device registration
 
-ModelUpdate: Model updates
+- `DeviceRegistration`: Device registration
+- `ModelUpdate`: Model updates
+- `AggregatedModel`: Aggregated models
+- `ControlCommand`: Control commands
+- `DeviceStatus`: Device status
 
-AggregatedModel: Aggregated models
+## 🔄 System Operation Cycle
 
-ControlCommand: Control commands
+```
+# 5-minute cycle:
+1. Data collection → sensor_interface.collect_data()
+2. Feature extraction → preprocessor.preprocess_single()
+3. Buffer storage → data_buffer.append()
 
-DeviceStatus: Device status
+# 1-hour cycle:
+1. Local training → trainer.train_federated_round()
+2. Privacy protection → privacy_guard.add_noise_to_gradient()
+3. Edge aggregation → aggregator.federated_averaging()
 
-🔄 System Operation Cycle
+# 10-hour cycle:
+1. Cloud aggregation → global_aggregator.aggregate()
+2. DRL update → sac_agent.update()
+3. Policy optimization → controller.get_control_action()
+```
 
-5-minute cycle:
-Data collection → sensor_interface.collect_data()
+## 📊 Key Design Patterns
 
-Feature extraction → preprocessor.preprocess_single()
+1. **Layered Architecture**: Device-Edge-Cloud three-tier separation
+2. **Asynchronous Processing**: `asyncio` implementation for concurrent data collection
+3. **Strategy Pattern**: Multiple selectable aggregation algorithms
+4. **Observer Pattern**: Data callback mechanism
+5. **Factory Pattern**: Model creation and management
 
-Buffer storage → data_buffer.append()
+## 🔐 Privacy Protection Mechanisms
 
-1-hour cycle:
-Local training → trainer.train_federated_round()
+```
+# Multi-layer privacy protection:
+1. Local level: Differential privacy noise
+2. Transmission level: Gradient compression and clipping
+3. Aggregation level: Secure aggregation protocol
+4. Storage level: Data anonymization
+```
 
-Privacy protection → privacy_guard.add_noise_to_gradient()
+## ⚡ Performance Optimization
 
-Edge aggregation → aggregator.federated_averaging()
+1. **Communication Optimization**:
+   - Gradient compression (Top-K sparsification)
+   - Asynchronous update support
+   - Caching mechanism
+2. **Computational Optimization**:
+   - Batch processing
+   - Early stopping mechanism
+   - Adaptive learning rate
+3. **Storage Optimization**:
+   - Circular buffer
+   - Model version management
+   - Incremental updates
 
-10-hour cycle:
-Cloud aggregation → global_aggregator.aggregate()
+## Core Algorithms
 
-DRL update → sac_agent.update()
+### 1. Federated Averaging (FedAvg)
 
-Policy optimization → controller.get_control_action()
-
-📊 Key Design Patterns
-Layered Architecture: Device-Edge-Cloud three-tier separation
-
-Asynchronous Processing: asyncio implementation for concurrent data collection
-
-Strategy Pattern: Multiple selectable aggregation algorithms
-
-Observer Pattern: Data callback mechanism
-
-Factory Pattern: Model creation and management
-
-🔐 Privacy Protection Mechanisms
-
-Multi-layer privacy protection:
-Local level: Differential privacy noise
-
-Transmission level: Gradient compression and clipping
-
-Aggregation level: Secure aggregation protocol
-
-Storage level: Data anonymization
-
-⚡ Performance Optimization
-Communication Optimization:
-
-Gradient compression (Top-K sparsification)
-
-Asynchronous update support
-
-Caching mechanism
-Computational Optimization:
-
-Batch processing
-
-Early stopping mechanism
-
-Adaptive learning rate
-Storage Optimization:
-
-Circular buffer
-
-Model version management
-
-Incremental updates
-
-Core Algorithms
-Federated Averaging (FedAvg)
-
-Weighted average aggregation
-
+```
+# Weighted average aggregation
 for update in client_updates:
     weight = update.num_samples / total_samples
     aggregated += weight * update.model_weights
+```
 
-Differential Privacy
+### 2. Differential Privacy
 
-Gradient clipping and noise addition
-
+```
+# Gradient clipping and noise addition
 clipped_grad = clip(gradient, clip_norm)
 noisy_grad = clipped_grad + Gaussian(0, σ²)
+```
 
-SAC Algorithm
+### 3. SAC Algorithm
 
-Soft policy update
-
-Q_target = r + γ  (min(Q1', Q2') - α  log_π)
+```
+# Soft policy update
+Q_target = r + γ * (min(Q1', Q2') - α * log_π)
 policy_loss = α * log_π - min(Q1, Q2)
+```
 
-Configuration
+## Configuration
 
-Main configuration file: config.yaml
+Main configuration file: `config.yaml`
 
 Key parameters:
-num_devices: Number of devices
 
-num_edge_servers: Number of edge servers
+- `num_devices`: Number of devices
+- `num_edge_servers`: Number of edge servers
+- `privacy.epsilon`: Privacy budget
+- `aggregation.method`: Aggregation algorithm
+- `drl_agent.algorithm`: DRL algorithm
 
-privacy.epsilon: Privacy budget
-
-aggregation.method: Aggregation algorithm
-
-drl_agent.algorithm: DRL algorithm
-
-Performance Metrics
+## Performance Metrics
 
 System optimization objectives:
-Energy Reduction: 20-30%
 
-Comfort Improvement: Maintain above 90%
+1. **Energy Reduction**: 20-30%
+2. **Comfort Improvement**: Maintain above 90%
+3. **Peak Shaving**: 15-25%
+4. **Privacy Protection**: ε-differential privacy guarantee
 
-Peak Shaving: 15-25%
-
-Privacy Protection: ε-differential privacy guarantee
-
-Experimental Results
+## Experimental Results
 
 Typical results in simulation environment:
-Average energy consumption: 45.2 kW
 
-Comfort violation rate: < 5%
+- Average energy consumption: 45.2 kW
+- Comfort violation rate: < 5%
+- Model convergence rounds: 50-100 rounds
+- Communication overhead reduction: 60% (compared to centralized)
 
-Model convergence rounds: 50-100 rounds
+## Extension Features
 
-Communication overhead reduction: 60% (compared to centralized)
+### 1. Real Deployment
 
-Extension Features
-Real Deployment
+- Supports real sensor integration
+- Supports mainstream HVAC control protocols (BACnet, Modbus)
+- Supports cloud platform deployment (AWS, Azure)
 
-Supports real sensor integration
+### 2. Advanced Features
 
-Supports mainstream HVAC control protocols (BACnet, Modbus)
+- Multi-building collaborative optimization
+- Demand response integration
+- Carbon emission optimization
+- Predictive maintenance
 
-Supports cloud platform deployment (AWS, Azure)
-Advanced Features
+## Troubleshooting
 
-Multi-building collaborative optimization
+1. **Insufficient Memory**: Reduce `num_devices` or decrease `batch_size`
+2. **Training Not Converging**: Adjust `learning_rate` or increase `local_epochs`
+3. **Privacy Budget Exceeded**: Increase `privacy.epsilon` or reduce query count
 
-Demand response integration
-
-Carbon emission optimization
-
-Predictive maintenance
-
-Troubleshooting
-Insufficient Memory: Reduce num_devices or decrease batch_size
-
-Training Not Converging: Adjust learning_rate or increase local_epochs
-
-Privacy Budget Exceeded: Increase privacy.epsilon or reduce query count
-
-Contribution Guidelines
+## Contribution Guidelines
 
 Contributions are welcome! Please follow these steps:
-Fork the repository
 
-Create a feature branch
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Submit a Pull Request
 
-Commit your changes
-
-Submit a Pull Request
-
-License
+## License
 
 MIT License
 
-Contact
+## Contact
 
 For questions or suggestions, please submit an Issue or contact the maintainer.
 
-References
-McMahan et al., "Communication-Efficient Learning of Deep Networks from Decentralized Data"
+## References
 
-Li et al., "Federated Optimization in Heterogeneous Networks"
-
-Haarnoja et al., "Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning"
-
-Dwork et al., "The Algorithmic Foundations of Differential Privacy"
+1. McMahan et al., "Communication-Efficient Learning of Deep Networks from Decentralized Data"
+2. Li et al., "Federated Optimization in Heterogeneous Networks"
+3. Haarnoja et al., "Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning"
+4. Dwork et al., "The Algorithmic Foundations of Differential Privacy"
